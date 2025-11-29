@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin dashboard</title>
+    <style>
+        body{
+            text-align: center;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .card{
+            border: 1px solid black;
+            width: 200ox;
+            padding: 10px;
+            margin : 10px;
+            display: inline-block;
+            border-radius: 8px;
+        }
+        button{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>Admin Dashboard</h2>
+    <select id = "filterCat" onchange="showData()">
+        <option value = "">All Category</option>
+        <option>Auto</option>
+        <option>Car</option>
+        <option>Truck</option>
+        <option>Bus</option>
+    </select>
+    <select id = "filterSta" onabort="showData()">
+        <option value="">All Category</option>
+        <option>Available</option>
+        <option>Unavailable</option>
+    </select>
+    <button onclick="clearFilters()">Clear Filter
+    </button>
+    <hr>
+    <h3>Add Fleet</h3>
+    <input type = "text" id = "regno" placeholder="RegNo"><br><br>
+    <select id = "category">
+        <option value="">Category</option>
+        <option>Auto</option>
+        <option>Car</option>
+        <option>Truck</option>
+        <option>Bus</option>
+    </select><br><br>
+
+    <input type="text" id = "driver" placeholder="Driver Name"><br><br>
+    <label><input type = "checkbox" id = "status">Available</label><br><br>
+
+    <button onclick="addFleet()">Add Fleet
+    </button>
+    <hr>
+
+    <h3>Fleet List</h3>
+    <div id = "show"></div>
+
+    <script>
+        let arr = [];
+
+        function addFleet(){
+            if(regno.value=="" ||category.value == "" || driver.value== "" ){
+                alert("Fill all fields");
+                return;
+            }
+            arr.push({
+                reg:regno.value,
+                cat:category.value,
+                dr:driver.value,
+                st:status.checked?"Available":"Unavailable"
+            });
+
+            regno.value = "";
+            category.value= "";
+            driver.value = "";
+            status.checked = false;
+            showData();
+        }
+
+        function showData(){
+            let fcat = filterCat.value;
+            let fsta = filterSta.value;
+            show.innerHTML = "";
+
+            arr.filter(v => (fcat == "" || v.cat == fcat) && (fsta == "" || v.st == fsta)).forEach((v,i) =>{
+                show.innerHTML += 
+                <div class = "card">
+                    <p><b> Reg:</b>${v.reg}</p>
+                    <p><b> Cat:</b>${v.cat}</p>
+                    <p><b> Driver:</b>${v.dr}</p>
+                    <p><b> status:</b>${v.st}</p>
+                    <button onclick = "updateDriver(${i})">Update Driver</button>
+                    <button onclick= "changeStatus(${i})"> Availability</button>
+                    <button onclick = "deleteFleet(${i})">Delete</button>
+                </div>;
+            })
+            
+        }
+
+        function updateDriver(i){
+            let name = prompt("Enter new driver name: ");
+            if(name){
+                arr[i].dr = name;
+                showData();
+            }
+        }
+
+        function changeStatus(i){
+            arr[i].st = arr[i].st == "Available"?"Unavailable":"Available";
+            showData();        }
+
+        function deleteFleet(i){
+            arr.splice(i,1);
+            showData();
+        }
+
+        function clearFilters(){
+            filterCat.value = "";
+            filterSta.value = "";
+            showData();
+        }
+    </script>
+</body>
+</html>
