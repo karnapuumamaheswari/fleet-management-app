@@ -103,11 +103,11 @@
         let arr = [];
 
         function addFleet(){
-            let reg = regno.value.trim();
-            let cat = category.value;
-            let dr = driver.value.trim();
-            let st = status.checked?"Aavailable":"Unavailable";
-            if(regno.value==="" ||category.value === "" || driver.value=== "" ){
+            let reg = document.getElementById("regno").value.trim();
+            let cat = document.getElementById("category").value;
+            let dr = document.getElementById("driver").value.trim();
+            let st = document.getElementById("status").checked?"Aavailable":"Unavailable";
+            if(reg ==="" ||cat === "" || dr === "" ){
                 alert("Fill all fields");
                 return;
             }
@@ -126,22 +126,24 @@
         }
 
         function showData(){
+            let box = document.getElementById("show");
             let fcat = filterCat.value;
             let fsta = filterSta.value;
-            show.innerHTML = "";
+            box.innerHTML = "";
 
             arr.filter(v => (fcat === "" || v.cat ===fcat) && (fsta === "" || v.st === fsta)).forEach((v,i) =>{
-                show.innerHTML += 
-                <div class = "card">
+                let card = document.createElement("div");
+                card.className= "card";
+                card.innerHTML = `
                     <p><b> Reg:</b>${v.reg}</p>
                     <p><b> Cat:</b>${v.cat}</p>
                     <p><b> Driver:</b>${v.dr}</p>
                     <p><b> status:</b>${v.st}</p>
                     <button onclick = "updateDriver(${i})">Update Driver</button>
                     <button onclick= "changeStatus(${i})"> Availability</button>
-                    <button onclick = "deleteFleet(${i})">Delete</button>
-                </div>;
-            })
+                    <button onclick = "deleteFleet(${i})">Delete</button>`;
+                    box.appendChild(card);
+            });
             
         }
 
