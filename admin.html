@@ -8,6 +8,8 @@
         body{
             text-align: center;
             font-family: Arial, Helvetica, sans-serif;
+            background-color: aqua;
+
         }
         .card{
             border: 1px solid black;
@@ -17,13 +19,30 @@
             display: inline-block;
             border-radius: 8px;
         }
+        nav{
+            background-color: antiquewhite;
+            padding:10px;
+        }
+        nav select,nav button{
+            margin-right: 10px;
+        }
+        .layout{
+            display : flex;
+        }
+        #sidebar{
+            width : 260px;
+            padding : 15px;
+            border-right:  1px solid #ccc;
+        }
         button{
             cursor: pointer;
         }
     </style>
 </head>
 <body>
+    <nav>
     <h2>Admin Dashboard</h2>
+    Category:
     <select id = "filterCat" onchange="showData()">
         <option value = "">All Category</option>
         <option>Auto</option>
@@ -31,6 +50,7 @@
         <option>Truck</option>
         <option>Bus</option>
     </select>
+     Availability:
     <select id = "filterSta" onabort="showData()">
         <option value="">All Category</option>
         <option>Available</option>
@@ -38,9 +58,14 @@
     </select>
     <button onclick="clearFilters()">Clear Filter
     </button>
+    </nav>
     <hr>
-    <h3>Add Fleet</h3>
-    <input type = "text" id = "regno" placeholder="RegNo"><br><br>
+
+    <div class = "layout">
+        <aside id = "sidebar">
+        <h3>Fleet Form</h3>
+        <form id = "fleetForm">
+        <input type = "text" id = "regno" placeholder="RegNo"><br><br>
     <select id = "category">
         <option value="">Category</option>
         <option>Auto</option>
@@ -52,13 +77,16 @@
     <input type="text" id = "driver" placeholder="Driver Name"><br><br>
     <label><input type = "checkbox" id = "status">Available</label><br><br>
 
-    <button onclick="addFleet()">Add Fleet
+    <button type = "submit" onclick="addFleet()">Add Fleet
     </button>
-    <hr>
+    </form>
+    </aside>
 
-    <h3>Fleet List</h3>
-    <div id = "show"></div>
-
+    <section id = main>
+        <h3>Fleet cards</h3>
+        <div id = "cards" class = "card-wrap"></div>
+    </section>
+    </div>
     <script>
         let arr = [];
 
