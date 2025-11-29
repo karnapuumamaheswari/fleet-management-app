@@ -1,171 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin dashboard</title>
-    <style>
-        body{
-            text-align: center;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: aqua;
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
 
-        }
-        .card{
-            border: 1px solid black;
-            width: 200ox;
-            padding: 10px;
-            margin : 10px;
-            display: inline-block;
-            border-radius: 8px;
-        }
-        nav{
-            background-color: antiquewhite;
-            padding:10px;
-        }
-        nav select,nav button{
-            margin-right: 10px;
-        }
-        .layout{
-            display : flex;
-        }
-        #main{
-            flex:1;
-            padding :15px;
-        }
-        .card{
-            border: 1px solid #999;
-            border-radius: 6px;
-            padding: 10px;
-            margin:10px;
-            width: 250px;
-            box-sizing: border-box;
-        }
-        #sidebar{
-            width : 260px;
-            padding : 15px;
-            border-right:  1px solid #ccc;
-        }
-        button{
-            cursor: pointer;
-        }
-    </style>
+<style>
+  body{font-family:Arial;margin:0;}
+  nav{background:black;color:white;padding:12px;}
+  nav select,nav button{padding:6px;margin-right:10px;}
+
+  .container{display:flex;}
+  #sidebar{width:260px;border-right:2px solid #ccc;padding:15px;}
+  #main{flex:1;padding:15px;}
+
+  .card{
+    border:1px solid gray;
+    padding:10px;
+    border-radius:8px;
+    width:250px;
+    margin:10px;
+    display:inline-block;
+    vertical-align:top;
+  }
+</style>
 </head>
-<body>
-    <nav>
-    <h2>Admin Dashboard</h2>
-    Category:
-    <select id = "filtercat" onchange="showData()">
-        <option value = "">All Category</option>
-        <option value = "Auto">Auto</option>
-        <option value = "Car">Car</option>
-        <option value = "Truck">Truck</option>
-        <option value = "Bus">Bus</option>
-    </select>
-    Availability:
-    <select id = "filtersta" onabort="showData()">
-        <option value="">All Category</option>
-        <option value = "Available">Available</option>
-        <option value = "Unavailable">Unavailable</option>
-    </select>
-    <button onclick="clearFilters()">Clear Filter
-    </button>
-    </nav>
-    <hr>
 
-    <div class = "layout">
-        <aside id = "sidebar">
-        <h3>Fleet Form</h3>
-        <form id = "fleetForm">
-        <input type = "text" id = "regno" placeholder="RegNo"><br><br>
-    <select id = "category">
-        <option value="">Category</option>
-        <option value = "Auto">Auto</option>
-        <option value = "Car">Car</option>
-        <option value = "Truck">Truck</option>
-        <option value = "Bus">Bus</option>
+<body>
+
+<nav>
+  <!-- Category Filter -->
+  <select id="filtercat">
+    <option value="">All Category</option>
+    <option value="Auto">Auto</option>
+    <option value="Car">Car</option>
+    <option value="Truck">Truck</option>
+    <option value="Bus">Bus</option>
+  </select>
+
+  <!-- Availability Filter -->
+  <select id="filtersta">
+    <option value="">All Status</option>
+    <option value="Available">Available</option>
+    <option value="Unavailable">Unavailable</option>
+  </select>
+
+  <button onclick="clearFilters()">Clear Filters</button>
+</nav>
+
+<div class="container">
+
+  <!-- Sidebar Form -->
+  <div id="sidebar">
+    <h3>Add Fleet</h3>
+
+    <input id="regno" type="text" placeholder="Reg No of Vehicle"><br><br>
+
+    <select id="category">
+      <option value="">Select Category</option>
+      <option>Auto</option>
+      <option>Car</option>
+      <option>Truck</option>
+      <option>Bus</option>
     </select><br><br>
 
-    <input type="text" id = "driver" placeholder="Driver Name"><br><br>
-    <label><input type = "checkbox" id = "status">Available</label><br><br>
+    <input id="driver" type="text" placeholder="Driver Name"><br><br>
 
-    <button type = "submit" onclick="addFleet()">Add Fleet
-    </button>
-    </form>
-    </aside>
+    <label><input type="checkbox" id="status"> Available</label><br><br>
 
-    <section id = main>
-        <h3>Fleet cards</h3>
-        <div id = "box"></div
-    </section>
-    </div>
-    <script>
-        let arr = [];
+    <button onclick="addFleet()">Add Fleet</button>
+  </div>
 
-        function addFleet(){
-            let reg = document.getElementById("regno").value.trim();
-            let cat = document.getElementById("category").value;
-            let dr = document.getElementById("driver").value.trim();
-            let st = document.getElementById("status").checked?"Aavailable":"Unavailable";
-            if(reg ==="" ||cat === "" || dr === "" ){
-                alert("Fill all fields");
-                return;
-            }
-            arr.push({
-                reg,
-                cat,
-                dr,
-                st
-            });
+  <!-- Main Content -->
+  <div id="main">
+    <h3>Fleet Cards</h3>
+    <div id="show"></div>
+  </div>
 
-            regno.value = "";
-            category.value= "";
-            driver.value = "";
-            status.checked = false;
-            showData();
-        }
+</div>
 
-        function showData(){
-            let show = document.getElementById("show");
-            let fcat = filterCat.value;
-            let fsta = filterSta.value;
-           show.innerHTML = "";
 
-            arr.filter(v => (fcat === "" || v.cat ===fcat) && (fsta === "" || v.st === fsta)).forEach((v,i) =>{
-                show.innerHTML += `
-                    <p><b> Reg:</b>${v.reg}</p>
-                    <p><b> Cat:</b>${v.cat}</p>
-                    <p><b> Driver:</b>${v.dr}</p>
-                    <p><b> status:</b>${v.st}</p>
-                    <button onclick = "updateDriver(${i})">Update Driver</button>
-                    <button onclick= "changeStatus(${i})"> Availability</button>
-                    <button onclick = "deleteFleet(${i})">Delete</button>`;
-            });
-            
-        }
+<script>
+let arr=[];
 
-        function updateDriver(i){
-            let name = prompt("Enter new driver name: ");
-            if(name){
-                arr[i].dr = name;
-                showData();
-            }
-        }
+// Add Fleet
+function addFleet(){
+  let reg=regno.value.trim();
+  let cat=category.value;
+  let dr=driver.value.trim();
+  let st=status.checked?"Available":"Unavailable";
 
-        function changeStatus(i){
-            arr[i].st = arr[i].st == "Available"?"Unavailable":"Available";
-            showData();        }
+  if(!reg || !cat || !dr){
+    alert("All fields required");
+    return;
+  }
 
-        function deleteFleet(i){
-            arr.splice(i,1);
-            showData();
-        }
+  arr.push({reg,cat,dr,st});
 
-        function clearFilters(){
-            filterCat.value = "";
-            filterSta.value = "";
-            showData();
-        }
-    </script>
+  // Reset Filters so new card always appears
+  filtercat.value="";
+  filtersta.value="";
+
+  regno.value="";
+  category.value="";
+  driver.value="";
+  status.checked=false;
+
+  render();
+}
+
+// Render Fleet Cards + Filters
+function render(){
+  show.innerHTML="";
+  let fcat=filtercat.value;
+  let fsta=filtersta.value;
+
+  arr.filter(v =>
+    (fcat=="" || v.cat==fcat) &&
+    (fsta=="" || v.st==fsta)
+  ).forEach((v,i)=>{
+    show.innerHTML+=`
+    <div class="card">
+      <p><b>Reg No:</b> ${v.reg}</p>
+      <p><b>Category:</b> ${v.cat}</p>
+      <p><b>Driver:</b> ${v.dr}</p>
+      <p><b>Status:</b> ${v.st}</p>
+
+      <button onclick="updateDriver(${i})">Update Driver</button><br><br>
+      <button onclick="changeStatus(${i})">Change Availability</button><br><br>
+      <button onclick="deleteFleet(${i})">Delete Vehicle</button>
+    </div>`;
+  });
+}
+
+// Update Driver
+function updateDriver(i){
+  let name=prompt("Enter new driver name:");
+  if(name===null) return;
+  name=name.trim();
+  if(name===""){
+    alert("Driver name can't be empty");
+    return;
+  }
+  arr[i].dr=name;
+  render();
+}
+
+// Change Status
+function changeStatus(i){
+  arr[i].st=arr[i].st==="Available"?"Unavailable":"Available";
+  render();
+}
+
+// Delete Fleet
+function deleteFleet(i){
+  if(confirm("Are you sure?")){
+    arr.splice(i,1);
+    render();
+  }
+}
+
+// Clear Filters
+function clearFilters(){
+  filtercat.value="";
+  filtersta.value="";
+  render();
+}
+
+filtercat.addEventListener("change",render);
+filtersta.addEventListener("change",render);
+</script>
+
 </body>
 </html>
