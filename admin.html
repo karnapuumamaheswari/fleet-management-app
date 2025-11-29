@@ -96,7 +96,7 @@
 
     <section id = main>
         <h3>Fleet cards</h3>
-        <div id = "cards" class = "card-wrap"></div>
+        <div id = "box"></div
     </section>
     </div>
     <script>
@@ -126,15 +126,13 @@
         }
 
         function showData(){
-            let box = document.getElementById("show");
+            let show = document.getElementById("show");
             let fcat = filterCat.value;
             let fsta = filterSta.value;
-            box.innerHTML = "";
+           show.innerHTML = "";
 
             arr.filter(v => (fcat === "" || v.cat ===fcat) && (fsta === "" || v.st === fsta)).forEach((v,i) =>{
-                let card = document.createElement("div");
-                card.className= "card";
-                card.innerHTML = `
+                show.innerHTML += `
                     <p><b> Reg:</b>${v.reg}</p>
                     <p><b> Cat:</b>${v.cat}</p>
                     <p><b> Driver:</b>${v.dr}</p>
@@ -142,7 +140,6 @@
                     <button onclick = "updateDriver(${i})">Update Driver</button>
                     <button onclick= "changeStatus(${i})"> Availability</button>
                     <button onclick = "deleteFleet(${i})">Delete</button>`;
-                    box.appendChild(card);
             });
             
         }
